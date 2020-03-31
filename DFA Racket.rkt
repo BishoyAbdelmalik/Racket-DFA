@@ -10,6 +10,12 @@
     (b))
 )
 
+;;;The final state is "b"
+(define (is-final-state? state) 
+    (if 
+    (equal? state "b") #t #f)
+)
+
 ;;;transitions functions
 (define (a-state substring)
     (cond
@@ -32,3 +38,26 @@
         (else "not on the alphabet")
     )
 )
+
+
+;;; next state 
+(define (next-state s str ) 
+    (cond 
+        ((equal? "a" s) (a-state str))
+        ((equal? "b" s) (b-state str))
+        ((equal? "c" s) (c-state str))
+        (else "error") 
+    )
+)
+;;; parse the string
+(define (parse str) 
+    (if (equal? str "") "it is in the language" (is-in-the-language? "a" str))
+)
+
+(define (is-in-the-language? state str)
+  (cond 
+        ((and (= (string-length str) 1) (is-final-state? (next-state state str))) "it is in the language")
+        ((and (= (string-length str) 1) (not (is-final-state? (next-state state str)))) "no in the language")
+        (else (is-in-the-language? (next-state state (substring str 0 1)) (substring str 1)))
+        ))
+   
