@@ -57,7 +57,13 @@
 (define (is-in-the-language? state str)
   (cond 
         ((and (= (string-length str) 1) (is-final-state? (next-state state str))) "it is in the language")
-        ((and (= (string-length str) 1) (not (is-final-state? (next-state state str)))) "no in the language")
+        ((and (= (string-length str) 1) (not (is-final-state? (next-state state str)))) "not in the language")
         (else (is-in-the-language? (next-state state (substring str 0 1)) (substring str 1)))
         ))
+;;;test cases
+(parse "0111")
+(parse "01010")
+(parse "01101")
+(parse "011")
+(parse "011010")
    
