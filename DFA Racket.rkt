@@ -10,10 +10,11 @@
     (b))
 )
 
-;;;The final state is "b"
-(define (is-final-state? state) 
+;;The final state is "b"
+
+(define (is-final-state? state passed_dfa) 
     (if 
-    (equal? state "b") #t #f)
+    (equal? (string->symbol state)  (car (list-ref passed_dfa 2))) #t #f)
 )
 
 ;;;transitions functions
@@ -41,26 +42,27 @@
 
 
 ;;; next state 
-(define (next-state s str ) 
+(define (next-state state str ) 
     (cond 
-        ((equal? "a" s) (a-state str))
-        ((equal? "b" s) (b-state str))
-        ((equal? "c" s) (c-state str))
+        ((equal? "a" state) (a-state str))
+        ((equal? "b" state) (b-state str))
+        ((equal? "c" state) (c-state str))
         (else "error") 
     )
 )
 ;;; parse the string
 (define (parse str) 
-    (if (equal? str "") "it is in the language" (is-in-the-language? "a" str))
+    (if (equal? str "") "not in the language" (is-in-the-language? "a" str))
 )
 
 (define (is-in-the-language? state str)
   (cond 
-        ((and (= (string-length str) 1) (is-final-state? (next-state state str))) "it is in the language")
-        ((and (= (string-length str) 1) (not (is-final-state? (next-state state str)))) "not in the language")
+        ((and (= (string-length str) 1) (is-final-state? (next-state state str) dfa)) "it is in the language")
+        ((and (= (string-length str) 1) (not (is-final-state? (next-state state str) dfa ))) "not in the language")
         (else (is-in-the-language? (next-state state (substring str 0 1)) (substring str 1)))
         ))
 ;;;test cases
+(parse "")
 (parse "0111")
 (parse "01010")
 (parse "01101")
